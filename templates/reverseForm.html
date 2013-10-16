@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block body %}
+    {{ super() }}
+    <form action="/reverseResult" method="POST">
+        <select id="demon" name="demon">
+            {% for d in demons %}
+            <option value="{{d['name']}}">{{d['race']}} - {{d['name']}} ({{d['lv']}})</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Parents"/>
+        </br>
+        <select id="parent1" name="parent1"> Démon 1
+            <option></option>
+            {% for d in demons %}
+            <option value="{{d['name']}}">{{d['race']}} - {{d['name']}} ({{d['lv']}})</option>
+            {% endfor %}
+        </select>Parent 1
+    </form>
+{% endblock %}

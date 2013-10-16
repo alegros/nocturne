@@ -1,0 +1,7 @@
+{% extends "layout.html" %}
+{% block body %}
+    {{ super() }}
+    {% for p in parents %}
+    <p>{{demon_full_name(p[0])}} x {{demon_full_name(p[1])}}</p>
+    {% endfor %}
+{% endblock %}

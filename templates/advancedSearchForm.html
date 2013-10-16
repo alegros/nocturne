@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block body %}
+    {{ super() }}
+    <form action="/advancedSearchResult" method="POST">
+        <p>Démon<input type="submit" id="chercher" name="chercher" value="Chercher"/></p>
+        <label>Race</label><select id="race" name="race"><option></option></select>
+        <label>Niveau minimum</label><input type="text" id="minlv" name="minlv"/>
+        <label>Niveau maximum</label><input type="text" id="maxlv" name="maxlv"/>
+        {% include "inc/affinitiesInput.html" %}
+        {% include "inc/skillsInput.html" %}
+    </form>
+{% endblock %}

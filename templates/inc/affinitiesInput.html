@@ -1,0 +1,7 @@
+<p>Affinités</p>
+<label>Toutes</label><input type="radio" id="nbAffs" value="all" name="nbAffs"/>
+<label>Au moins une</label><input type="radio" id="nbAffs" value="one" name="nbAffs"/>
+<br/>
+{% for aff in affinities %}
+<label>{{affinity(aff[0])}}</label><input type="checkbox" id="{{aff[0]}}" name="{{aff[0]}}"/>
+{% endfor %}

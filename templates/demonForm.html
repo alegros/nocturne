@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block body %}
+    {{ super() }}
+    <select id="demon_list" name="demon_list" onchange="queryDemonData(this)">
+        {% for d in demons %}
+        <option value="{{d['name']}}">{{d['race']}} - {{d['name']}} ({{d['lv']}})</option>
+        {% endfor %}
+    </select>
+{% endblock %}
