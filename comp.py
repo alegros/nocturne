@@ -13,37 +13,31 @@ app.config.from_object(__name__)
 def comp():
     return render_template('index.html')
 
-@app.route('/demonForm')
-def demon_form():
-    data = query_db(ALL_BY_RACE)
-    return render_template('demonForm.html', demons=data)
-
-@app.route('/demon', methods=['POST'])
+@app.route('/demonList', methods=['POST', 'GET'])
 def show_demon():
+    if request.method == 'GET':
+        data = query_db(ALL_BY_RACE)
+        return render_template('demonForm.html', demons=data)
     demonname = request.form['demon']
     demon = query_db(SINGLE, (demonname,))[0]
     return render_template('demon.html', demon=demon)
 
-@app.route('/fusionForm')
-def fusion_form():
-    data = query_db(ALL_BY_RACE)
-    return render_template('fusionForm.html', demons=data)
-
-@app.route('/fusionResult', methods=['POST'])
+@app.route('/fusion', methods=['POST', 'GET'])
 def fusion_result():
+    if request.method == 'GET':
+        data = query_db(ALL_BY_RACE)
+        return render_template('fusionForm.html', demons=data)
     fusres = fuse(request.form['d1'], request.form['d2'])
     if fusres is not None:
-        return render_template('fusionResult.html', demon=fusres)
+        return render_template('demon.html', demon=fusres)
     return u"Fusion sans résultat"
-            
-@app.route('/reverseForm')
-def reverse_form():
-    data = query_db(ALL_BY_RACE)
-    return render_template('reverseForm.html', demons=data)
 
-@app.route('/reverseResult', methods=['POST'])
+@app.route('/reverseFusion', methods=['POST', 'GET'])
 def reverse_result():
-    childname = request.form['demon']
+    if request.method == 'GET':
+        data = query_db(ALL_BY_RACE)
+        return render_template('reverseForm.html', demons=data)
+    childname = request.form['child']
     parent1 = request.form['parent1']
     child = query_db(SINGLE, (childname,))[0]
     if child['fs_type'] != 0:
@@ -92,6 +86,10 @@ def advancedSearchResult():
 def show_user_profile(username):
     return u"Comptes utilisateurs non implémentés"
     return u"User %s" % username
+
+@app.route('/changelog')
+def changeLog():
+    return render_template('changeLog.html')
 
 #-------------------Code logic--------------------
 def parseAdvancedSearch(formData):
@@ -175,8 +173,7 @@ def find_parents(child, parent1=""):
                 if parent1 != "" and d1['name'] != parent1 and d2['name'] != parent1:
                     continue
                 av = average_lv(d1, d2)
-                if av <= child['lv']\
-                and av > previousRankLv:
+                if av <= child['lv'] and av > previousRankLv:
                     couple = (d1, d2)
                     parents.append(couple)
                     break
@@ -202,7 +199,7 @@ def listAffinities():
 
 #-------------------Formats--------------------
 def demon_full_name(demon):
-    return u"%s : %s (%d)" % (demon['race'], demon['name'], demon['lv'])
+    return u"%s - %s (%d)" % (demon['race'], demon['name'], demon['lv'])
 
 def affinity(aff):
     return aff.replace(':', ' ')

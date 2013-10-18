@@ -2,20 +2,14 @@
 <html>
     <head>
         <link rel=stylesheet type=text/css href="{{url_for('static', filename='style.css')}}">
-        <title>NoctComp</title>
-        <script src="../js/jquery-2.0.3.js">
-        </script>
+        <title>Cathedral of shadows</title>
+        <script type='text/javascript' src="{{url_for('static', filename='jquery-2.0.3.js')}}"></script>
+        <script type='text/javascript' src="{{url_for('static', filename='functions.js')}}"></script>
     </head>
     <body>
-    {% block body %}
-    <div id="banner">
-        <h1>Cathedral of shadows</h1>
-    </div>
-    {% include "inc/menu.html" %}
-    <div class="container">
-    </div>
-    {% endblock %}
-        <script>
-        </script>
+        <h1 id="banner">Cathedral of shadows</h1>
+        {% include "inc/menu.html" %}
+        {% block form %}{% endblock %}
+        <div id="container"></div>
     </body>
 </html>

@@ -1,17 +1,15 @@
 {% extends "layout.html" %}
-{% block body %}
+{% block form %}
     {{ super() }}
-    <form action="/fusionResult" method="POST">
-        <select id="d1" name="d1">
-            {% for d in demons %}
-            <option value="{{d['name']}}">{{d['race']}} - {{d['name']}} ({{d['lv']}})</option>
-            {% endfor %}
-        </select>
-        <select id="d2" name="d2">
-            {% for d in demons %}
-            <option value="{{d['name']}}">{{d['race']}} - {{d['name']}} ({{d['lv']}})</option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="Fusionner"/>
-    </form>
+    <select id="d1" name="d1">
+        {% for d in demons %}
+        <option value="{{d['name']}}">{{d['race']}} - {{d['name']}} ({{d['lv']}})</option>
+        {% endfor %}
+    </select>
+    <select id="d2" name="d2">
+        {% for d in demons %}
+        <option value="{{d['name']}}">{{d['race']}} - {{d['name']}} ({{d['lv']}})</option>
+        {% endfor %}
+    </select>
+    <input type="submit" onclick="fusion()" value="Fusionner"/>
 {% endblock %}
