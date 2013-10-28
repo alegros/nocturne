@@ -4,6 +4,7 @@ import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 from queries import *
 from conf import *
+from nocturne import *
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -19,7 +20,8 @@ def show_demon():
         data = query_db(ALL_BY_RACE)
         return render_template('demonForm.html', demons=data)
     demonname = request.form['demon']
-    demon = query_db(SINGLE, (demonname,))[0]
+    demon = Demon()
+    demon.from_db_row(query_db(SINGLE, (demonname,))[0])
     return render_template('demon.html', demon=demon)
 
 @app.route('/fusion', methods=['POST', 'GET'])

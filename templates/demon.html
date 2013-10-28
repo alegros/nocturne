@@ -1,5 +1,23 @@
-<p><b>{{demon['name']}}</b> ({{demon['race']}}) level {{demon['lv']}} ({{demon['cost']}} maccas)</p>
-<p>{{demon['stats']}}</p>
-<p>{{demon['affinities']}}</p>
-<p>{{demon['spell']}}</p>
-<p>{{demon['info']}}</p>
+<div id='demon'>
+    <p><b>{{demon.name}}</b>({{demon.race}}) level {{demon.lv}} ({{demon.cost}} maccas)</p>
+    <div id='stats'>
+        <span id='hp'>HP {{demon.stats['hp']}}</span>
+        <span id='mp'>MP {{demon.stats['mp']}}</span>
+        <span id='str'>Strength {{demon.stats['str']}}</span>
+        <span id='vit'>Vitality {{demon.stats['vit']}}</span>
+        <span id='mag'>Magic {{demon.stats['mag']}}</span>
+        <span id='agi'>Agility {{demon.stats['agi']}}</span>
+        <span id='lck'>Luck {{demon.stats['lck']}}</span>
+    </div>
+    <div id='affs'>
+        {% for aff in demon.affs %}
+        <span id='aff'>{{aff}}</span>
+        {% endfor %}
+    </div>
+    <div id='spells'>
+        {% for spell in demon.spells %}
+        <span id='spell'>{{spell}}</span>
+        {% endfor %}
+    </div>
+    <p>{{demon.info}}</p>
+</div>
