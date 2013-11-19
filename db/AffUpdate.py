@@ -1,6 +1,6 @@
 #-*- encoding:utf-8 -*-
 import sqlite3
-db_path = '/home/alex/noctcomp/db/nocturne.db'
+db_path = '' # The database file
 
 conn = sqlite3.connect(db_path)
 res = conn.execute('select id, lower(affinities) from demons')
