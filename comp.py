@@ -20,8 +20,8 @@ def show_demon():
         data = query_db(ALL_BY_RACE)
         return render_template('demonForm.html', demons=data)
     demonname = request.form['demon']
-    demon = Demon()
-    demon.from_db_row(query_db(SINGLE, (demonname,))[0])
+    result_row = query_db(SINGLE, (demonname,))[0]
+    demon = Demon(result_row)
     return render_template('demon.html', demon=demon)
 
 @app.route('/fusion', methods=['POST', 'GET'])
@@ -175,7 +175,7 @@ def find_parents(child, parent1=""):
                 if parent1 != "" and d1['name'] != parent1 and d2['name'] != parent1:
                     continue
                 av = average_lv(d1, d2)
-                if av <= child['lv'] and av > previousRankLv:
+                if av > child['lv'] and av <= previousRankLv:
                     couple = (d1, d2)
                     parents.append(couple)
                     break

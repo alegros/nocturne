@@ -9,7 +9,11 @@
     <body>
         <h1 id="banner">Cathedral of shadows</h1>
         {% include "inc/menu.html" %}
-        {% block form %}{% endblock %}
-        <div id="container"></div>
+        <div id='container'>
+            <div id='form'>
+                {% block form %}{% endblock %}
+            </div>
+            <div id='content'></div>
+        </div>
     </body>
 </html>
