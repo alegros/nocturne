@@ -17,29 +17,34 @@ class CompTestCase(unittest.TestCase):
         
     def testGetDemon(self):
         rv = self.app.get('/demonList')
-        self.assertTrue(CompTestCase.pixieData[0] not in rv.data)
+        self.assertTrue("Fallen - Flauros (68)" in rv.data)
+        self.assertTrue("Tyrant - Beelzebub (Fly) (95)" in rv.data)
+        self.assertTrue("Fiend - Hell Biker (42)" in rv.data)
     
     def testPostDemon(self):
         rv = self.app.post('/demonList', data=dict(demon='Pixie'))
         for line in CompTestCase.pixieData:
             self.assertTrue(line in rv.data)
     
-    pixieData = ["<p><b>Pixie</b>(Fairy) level 2 (2400 maccas)</p>"\
-        ,"<span id='hp'>HP 36</span>"\
-        ,"<span id='mp'>MP 24</span>"\
-        ,"<span id='str'>Strength 3</span>"\
-        ,"<span id='vit'>Vitality 4</span>"\
-        ,"<span id='mag'>Magic 6</span>"\
-        ,"<span id='agi'>Agility 2</span>"\
-        ,"<span id='lck'>Luck 7</span>"\
-        ,"<span id='aff'>Resist:Elec</span>"\
-        ,"<span id='spell'>Dia</span>"\
-        ,"<span id='spell'>Zio</span>"\
-        ,"<span id='spell'>Seduce [3]</span>"\
-        ,"<span id='spell'>Rakunda [4]</span>"\
-        ,"<span id='spell'>Posumdi [5]</span>"\
-        ,"<span id='spell'>Wing Buffet [6]</span>"\
-        ,"<p>In English mythology, they are fairies of the forest that love to play tricks on people. They can also be a hard worker when necessary. </p>"]
+    def test_from_db_row(self):
+        pass
+    
+    pixieData = ["Pixie", "(Fairy) level 2 (2400 maccas)"\
+        ,"HP 36"\
+        ,"MP 24"\
+        ,"Strength 3"\
+        ,"Vitality 4"\
+        ,"Magic 6"\
+        ,"Agility 2"\
+        ,"Luck 7"\
+        ,"Resist:Elec"\
+        ,"Dia"\
+        ,"Zio"\
+        ,"Seduce [3]"\
+        ,"Rakunda [4]"\
+        ,"Posumdi [5]"\
+        ,"Wing Buffet [6]"\
+        ,"In English mythology, they are fairies of the forest that love to play tricks on people. They can also be a hard worker when necessary."]
 
 if __name__ == '__main__':
     unittest.main()

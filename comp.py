@@ -221,16 +221,27 @@ def query_db(query, args=()):
 def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
 
-@app.before_request
-def before_request():
-    g.db = connect_db()
-    g.db.row_factory = sqlite3.Row
+def get_db():
+    top = _app_ctx_stack.top
+    if not hasattr(top, 'sqlite_db'):
+        top.sqlite_db = sqlite3.connect(app.config['DATABASE'])
+    return top.sqlite_db
 
-@app.teardown_request
-def teardown_request(exception):
-    db = getattr(g, 'db', None)
-    if db is not None:
-        db.close()
+@app.eardown_appcontext
+def close_db_connection(exception):
+    top = _app_ctx_stack.top
+    if hasattr(top, 'sqlite_db'):
+        top.sqlite_db.close()
+#@app.before_request
+#def before_request():
+#    g.db = connect_db()
+#    g.db.row_factory = sqlite3.Row
+#
+#@app.teardown_request
+#def teardown_request(exception):
+#    db = getattr(g, 'db', None)
+#    if db is not None:
+#        db.close()
 
 if __name__ == '__main__':
     app.run()
