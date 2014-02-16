@@ -39,9 +39,8 @@ def reverse_result():
     if request.method == 'GET':
         return render_template('reverseForm.html', demons=g.cmp.long_names())
     elif request.method == 'POST':
-        args = (request.form['child'], request.form['parent1']) 
-        parents_data = g.cmp.find_parents(*args)
-        return render_template('reverseResult.html', parents=parents)
+        recipes, fs_type = g.cmp.find_parents(request.form['child'], request.form['parent1'])
+        return render_template('reverseResult.html', recipes=recipes, fs_type=fs_type)
 
 #@app.route('/specialFusion', methods=['POST'])
 #def special_fusion():
@@ -88,40 +87,6 @@ def reverse_result():
 #def changeLog():
 #    return render_template('changeLog.html')
 
-#-------------------Code logic--------------------
-def parseAdvancedSearch(formData):
-    """Create an sql statement using the data of
-    the advanced search form
-    """
-    sql = ADVANCED
-    args = []
-    affinities = []
-#    selSkills = ['selPhysical', 'selFire', 'selIce', 'selElectricity', 'selForce',\
-#                'selExpel', 'selDeath', 'selAlmighty', 'selCurse', 'selNerver', 'selMind']
-    moreAffs = OR if formData['nbAffs'] == 'one' else AND
-    if formData['race'] != u'':
-        sql += AND + RACE
-        args.append(formData['race'])
-    if formData['minlv'] != u'':
-        sql += AND + MINLV
-        args.append(formData['minlv'])
-    if formData['maxlv'] != u'':
-        sql += AND + MAXLV
-        args.append(formData['maxlv'])
-    for aff in query_db(ALL_AFF):
-        if str(aff) in formData.keys():
-            affinities.append(aff)
-    if len(affinities) > 0:
-        sql += AND + '('
-        i = 0
-        for a in affinities:
-            sql += AFF if i == 0 else moreAffs + AFF
-            args.append("%%%s%%" % a)
-            i += 1
-        sql+= ')'
-#    selectedSkills = [x for x in selSkills if x in formData.keys()]
-    return sql, args
-
 @app.context_processor
 def utility_processor():
     # Ajoute les fonctions de formattage au contexte des templates
@@ -158,8 +123,11 @@ def connect_db():
 @app.before_request
 def before_request():
     mc = memcache.Client(['127.0.0.1:11211'], debug=0)
+    compendium = build_cmp()
+    # Suppress fusion_functions' references to fusion functions or pickling will fail
+    compendium.fusion_functions = None
     if mc.get('cmp') == None:
-        mc.set('cmp', build_cmp())
+        mc.set('cmp', compendium)
     g.cmp = mc.get('cmp')
 
 @app.teardown_request

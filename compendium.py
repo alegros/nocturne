@@ -11,8 +11,6 @@ class Compendium(object):
     def __init__(self, t_demons, t_fsn_race, t_fsn_ds,\
                 t_fsn_evo, t_fsn_special, t_affinities):
 
-        self.fusion_functions = {0:self.basic_fusion, 1:self.myth_fusion, 2:self.evolution, 3:self.fiend_fusion}
-
         self.races = {}
         # We want the demons to stay in the order in which
         # they were selected : by race and level.
@@ -79,61 +77,54 @@ class Compendium(object):
                     break
             return fused
         
-    '''Functions to process parents finding'''
-    def find_parents(self, *args):
-        '''Calls the appropriate fusion according to the child's fusion type
-        Args must contains first the child name and then optionnaly a parent name
-        for basic fusions.
-        '''
-        if len(args) < 1:
-            return "No child given"
-        elif args[0] not in self.demons:
-            return "%s not found in database" % args[0]
-        else:        
-            child = self.get(args[0])
-            return (self.fusion_functions[child.fs_type](*args), child.fs_type)
+    def find_parents(self, child, parent):
+        return_data = None
+        child = self.get(child)
+        if child.fs_type == 1:
+            return_data = self.myth_fusion(child.name)
+        elif child.fs_type == 2:
+            return_data = self.evolution(child.name)
+        elif child.fs_type == 3:
+            return_data = self.fiend_fusion(child.name)
+        else:
+            parents = []
+            previousRankLv=0
+            
+            for demon in self.races[child.race]:
+                if demon.lv == child.lv:
+                    break
+                previousRankLv = demon.lv
+            rules = self.rules[child.race]
+            for rule in rules:
+                race1 = self.races[rule[0]]
+                race2 = self.races[rule[1]]
+                for x in race1:
+                    for y in race2:
+                        if ((parent != None and parent != '')
+                            and x.name != parent
+                            and y.name != parent):
+                            continue
+                        average = (x.lv + y.lv) / 2
+                        if average < child.lv and average >= previousRankLv:
+                            couple = (x.long_name(), y.long_name())
+                            parents.append(couple)
+                            break
+            return_data = parents
+        return return_data, child.fs_type
 
-    def myth_fusion(self, *args):
-        child = self.get(args[0])
+    def myth_fusion(self, child):
+        child = self.get(child)
         return "Myth fusions for %s" % child.name
     
-    def evolution(self, *args):
-        child = self.get(args[0])
+    def evolution(self, child):
+        child = self.get(child)
         return "Evolutions for %s" % child.name
 
-    def fiend_fusion(self, *args):
-        child = self.get(args[0])
+    def fiend_fusion(self, child):
+        child = self.get(child)
         return "Fiend fusions for %s" % child.name
 
-    def basic_fusion(self, *args):
-        '''Return a tuple as (list of parents couples, fusion type) for basic binary or sacrificial fusions'''
-        child = self.get(args[0])
-        parent = args[1] if len(args) > 1 else None
-        parents = []
-        previousRankLv=0
-
-        for demon in self.races[child.race]:
-            if demon.lv == child.lv:
-                break
-            previousRankLv = demon.lv
-        rules = self.rules[child.race]
-        for rule in rules:
-            race1 = self.races[rule[0]]n
-            race2 = self.races[rule[1]]
-            for x in race1:
-                for y in race2:
-                    if (parent != None
-                    and x.name != parent
-                    and y.name != parent):
-                        continue
-                    average = (x.lv + y.lv) / 2
-                    if average < child.lv and average >= previousRankLv:
-                        couple = (x.long_name(), y.long_name())
-                        parents.append(couple)
-                        break
-        return parents
-
-    '''Functions for retrieving data in te collections'''            
+    '''Functions for retrieving data in the collections'''            
     def names(self):
         ''' Returns names as : "Pixie"'''
         return self.demons.keys()

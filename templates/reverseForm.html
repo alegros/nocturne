@@ -2,16 +2,16 @@
 {% block form %}
     {{ super() }}
     <select id="child" name="demon">
-        {% for d in demons %}
-        <option value="{{d['name']}}">{{d['race']}} - {{d['name']}} ({{d['lv']}})</option>
+        {% for demon in demons %}
+        <option value="{{demon[0]}}">{{demon[1]}}</option>
         {% endfor %}
     </select>
     <input type="submit" onclick="reverse()" value="Parents"/>
     </br>
     <select id="parent1" name="parent1">
         <option></option>
-        {% for d in demons %}
-        <option value="{{d['name']}}">{{d['race']}} - {{d['name']}} ({{d['lv']}})</option>
+        {% for demon in demons %}
+        <option value="{{demon[0]}}">{{demon[1]}}</option>
         {% endfor %}
     </select>Parent 1
 {% endblock %}
