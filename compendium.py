@@ -6,20 +6,20 @@ all the fusion logic is encapsulated here.
 '''
 from string import join
 from collections import OrderedDict
+import sqlite3
 
 class Compendium(object):
-    def __init__(self, t_demons, t_fsn_race, t_fsn_ds,\
-                t_fsn_evo, t_fsn_special, t_affinities):
-
+    def __init__(self):
+        self.sqlinit()
         self.races = {}
         # We want the demons to stay in the order in which
         # they were selected : by race and level.
-        self.demons = OrderedDict() # t_demons
-        self.rules = {} # t_fsn_race, fusion rules
-        self.fiends = {} # t_fsn_ds, fiend fusions
-        self.evolutions = [] # t_fsn_evo, evolutions
-        self.specials = {} # t_fsn_special, special fusions
-        self.affinities = {} # t_affinities, demons' affinities
+        self.demons = OrderedDict()
+        self.rules = {}
+        self.fiends = {}
+        self.evolutions = []
+        self.specials = {}
+        self.affinities = {}
         # Affinities
         for aff in t_affinities:
             if aff[0] not in self.affinities:
@@ -27,33 +27,46 @@ class Compendium(object):
             self.affinities[aff[0]].append(aff[1])
         # races and demons
         for row in t_demons:
-            demon = Demon(row)
+            demon = Demon(ronw)
             self.demons[demon.name] = demon
             for aff in self.affinities[demon.name]:
                 demon.add_affinity(aff)
             if demon.race not in self.races:
                 self.races[demon.race] = []
             self.races[demon.race].append(demon)
-
         # Affinities is not needed anymore
         self.affinities = None
-
         # fusion rules
         for row in t_fsn_race:
             if row[0] not in self.rules:
                 self.rules[row[0]] = []
             self.rules[row[0]].append([row[1], row[2]])
         # special fusions
-        #for row in t_fsn_special:
-        #    self.specials[row[0]] = row[1]
         self.specials = {row[0]:row[1] for row in t_fsn_special}
         # Fiend fusions
-        #for fiend in t_fsn_ds:
-        #    self.fiends[fiend[0]] = fiend
         self.fiends = {fiend[0]:fiend for fiend in t_fsn_ds}
         # Evolutions
         self.evolutions = t_fsn_evo
+        self.sqldestroy()
             
+    def sqlinit(self):
+        cnx = sqlite3.connect('nocturne.db')
+        self.t_demons = cnx.execute('select name, race, lv, stats, affinities, spell, cost, info, fs_type from demons order by race, lv').fetchall()
+        self.t_fsn_race = cnx.execute('select result, demon1, demon2 from fsn_race').fetchall()
+        self.t_fsn_ds = cnx.execute('select demon, kagutsuhi, race from fsn_ds').fetchall()
+        self.t_fsn_evo = cnx.execute('select e from fsn_evo').fetchall()
+        self.t_fsn_special = cnx.execute('select demon, recipe from fsn_special').fetchall()
+        self.t_affinities = cnx.execute('select name, affinity from affinities').fetchall()
+        cnx.close()
+
+    def sqldestroy(self):
+        self.t_demons = None
+        self.t_fsn_race = None
+        self.t_fan_ds = None
+        self.t_fsn_ds = None
+        self.t_fsn_evo = None
+        self.t_fsn_special = None
+        self.t_affinities = None
 
     def fuse(self, x, y):
         '''Finds the child of x and y'''
@@ -89,7 +102,6 @@ class Compendium(object):
         else:
             parents = []
             previousRankLv=0
-            
             for demon in self.races[child.race]:
                 if demon.lv == child.lv:
                     break
