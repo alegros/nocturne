@@ -1,23 +1,24 @@
 <div id='demon'>
     <p><b>{{demon.name}}</b>({{demon.race}}) level {{demon.lv}} ({{demon.cost}} maccas)</p>
     <div id='stats'>
-        <span id='hp'>HP {{demon.stats['hp']}}</span>
-        <span id='mp'>MP {{demon.stats['mp']}}</span>
-        <span id='str'>Strength {{demon.stats['str']}}</span>
-        <span id='vit'>Vitality {{demon.stats['vit']}}</span>
-        <span id='mag'>Magic {{demon.stats['mag']}}</span>
-        <span id='agi'>Agility {{demon.stats['agi']}}</span>
-        <span id='lck'>Luck {{demon.stats['lck']}}</span>
+        <span id='hp'>HP {{demon.hp}}</span>
+        <span id='mp'>MP {{demon.mp}}</span>
+        <span id='str'>Strength {{demon.stg}}</span>
+        <span id='vit'>Vitality {{demon.vit}}</span>
+        <span id='mag'>Magic {{demon.mag}}</span>
+        <span id='agi'>Agility {{demon.agi}}</span>
+        <span id='lck'>Luck {{demon.lck}}</span>
     </div>
     <div id='affs'>
-        {% for aff in demon.affs %}
+        {% for aff in demon.affinities %}
         <span id='aff'>{{aff}}</span>
         {% endfor %}
     </div>
     <div id='spells'>
-        {% for spell in demon.spells %}
+        <!--{% for spell in demon.spells %}
         <span id='spell'>{{spell}}</span>
-        {% endfor %}
+        {% endfor %}-->
+	<span='spells-span'> Spells {{demon.spells}}</span>
     </div>
     <p>{{demon.info}}</p>
 </div>

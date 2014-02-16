@@ -2,13 +2,13 @@
 {% block form %}
     {{ super() }}
     <select id="d1" name="d1">
-        {% for d in demons %}
-        <option value="{{d['name']}}">{{d['race']}} - {{d['name']}} ({{d['lv']}})</option>
+        {% for demon in demons %}
+        <option value="{{demon[0]}}">{{demon[1]}}</option>
         {% endfor %}
     </select>
     <select id="d2" name="d2">
-        {% for d in demons %}
-        <option value="{{d['name']}}">{{d['race']}} - {{d['name']}} ({{d['lv']}})</option>
+        {% for demon in demons %}
+        <option value="{{demon[0]}}">{{demon[1]}}</option>
         {% endfor %}
     </select>
     <input type="submit" onclick="fusion()" value="Fusionner"/>

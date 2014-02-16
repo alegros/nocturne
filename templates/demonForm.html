@@ -3,8 +3,8 @@
     {{ super() }}
     <select id="demon_list" name="demon_list" onchange="demon()">
         <option value="">-</option>
-        {% for d in demons %}
-        <option value="{{d['name']}}">{{demon_full_name(d)}}</option>
+        {% for demon in demons %}
+		<option value="{{demon[0]}}">{{demon[1]}}</option>
         {% endfor %}
     </select>
 {% endblock %}
