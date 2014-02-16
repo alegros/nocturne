@@ -42,28 +42,6 @@ def reverse_result():
         recipes, fs_type = g.cmp.find_parents(request.form['child'], request.form['parent1'])
         return render_template('reverseResult.html', recipes=recipes, fs_type=fs_type)
 
-#@app.route('/specialFusion', methods=['POST'])
-#def special_fusion():
-#    """
-#    fsn_type:
-#    1 - Special sacrificial fusions
-#    2 - Evolutions
-#    3 - Fiends
-#    """
-#    child = query_db(SINGLE, (request.form['demon'],))[0]
-#    if child['fs_type'] == 1:
-#        data = query_db(SACRIFICIAL, (child['name'],))[0]
-#        #TODO : Modifier le template et parser le résultat avec recipe_parser()
-#        return render_template('specialFusion.html', data=data)
-#    elif child['fs_type'] == 2:
-#        #Add the LIKE '%' wild card around the parameter
-#        data = query_db(EVOLUTION, ("%%%s%%" % child['name'],))[0]
-#        #TODO : Modifier le template et parser le résultat avec evol_parser()
-#        return render_template('evolFusion.html', data=data)
-#    else: #fs_type==3
-#        data = query_db(FIEND, (child['name'],))[0]
-#        return render_template('fiendFusion.html', data=data)
-
 #@app.route('/advancedSearchForm')
 #def advancedSearchForm():
 #    return render_template('advancedSearchForm.html', affinities=query_db(ALL_AFF))
@@ -123,11 +101,8 @@ def connect_db():
 @app.before_request
 def before_request():
     mc = memcache.Client(['127.0.0.1:11211'], debug=0)
-    compendium = build_cmp()
-    # Suppress fusion_functions' references to fusion functions or pickling will fail
-    compendium.fusion_functions = None
     if mc.get('cmp') == None:
-        mc.set('cmp', compendium)
+        mc.set('cmp', build_cmp())
     g.cmp = mc.get('cmp')
 
 @app.teardown_request
