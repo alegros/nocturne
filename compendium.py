@@ -133,24 +133,6 @@ class Compendium(object):
                         break
         return parents
 
-    def special_fusion(self, child):
-        """fs_type:
-        1 - Special fusions
-        2 - Evolutions
-        3 - Fiends
-        if fs_type is 3, returns (('fiend's name', 'kagutsuchi phases', 'fused race'), 3)
-        if fs_type is 2, returns 
-        if fs_type is 1, returns (('demon's name', 'parent1+parent2+parent3'), 1)
-        """
-        child = self.demons[child]
-        fs_type = child['fs_type']
-        if fs_type == 1:
-            return self.specials[child['name']], fs_type
-        elif fs_type == 2:
-            return self.evolutions, fs_type
-        elif fs_type == 3:
-            return self.fiends[child['name']], fs_type
-
     '''Functions for retrieving data in te collections'''            
     def names(self):
         ''' Returns names as : "Pixie"'''
@@ -170,6 +152,7 @@ class Compendium(object):
         return self.demons[name]
 
 class Demon(object):
+    '''A class used exclusively by the Compendium class'''
     def __init__(self, row):
         self.name = row[0]
         self.race = row[1]
