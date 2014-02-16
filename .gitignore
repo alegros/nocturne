@@ -43,3 +43,7 @@ venv/
 
 # Vim can be annoying...
 *.swp
+
+# Emacs too...
+\#*\#
+*~
