@@ -3,6 +3,7 @@
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 from conf import *
 from compendium import Compendium
+from SearchForm import SearchForm
 import memcache
 
 app = Flask(__name__)
@@ -39,6 +40,19 @@ def reverse_result():
         recipes, fs_type = g.cmp.find_parents(request.form['child'], request.form['parent1'])
         return render_template('reverseResult.html', recipes=recipes, fs_type=fs_type)
 
+@app.route('/search', methods=['POST', 'GET'])
+def search():
+    form = SearchForm()
+    form.race.choices = [(x,x) for x in g.cmp.get_races()]
+    if request.method == 'GET':
+        print 'search get'
+        return render_template('search.html', form=form)
+    elif request.method == 'POST':
+        searchform = SearchForm(request.form)
+        results= None
+        print 'SearchForm.race = ', searchform.race
+        return render_template('searchResult.html', results=results)
+
 @app.context_processor
 def utility_processor():
     # Ajoute les fonctions de formattage au contexte des templates
@@ -48,7 +62,9 @@ def utility_processor():
 
 @app.before_request
 def before_request():
+    # retrieves the Compendium object
     mc = memcache.Client(['127.0.0.1:11211'], debug=0)
+    # either creates it or get it from the cache
     if mc.get('cmp') == None:
         mc.set('cmp', Compendium())
     g.cmp = mc.get('cmp')

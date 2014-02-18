@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block body %}
+    {{ super() }}
+    {% block form %}
+    <form action="/search" method="POST">
+        <!--<p>Démon<input type="submit" id="chercher" name="chercher" value="Chercher"/></p>
+        <label>Race</label><select id="race" name="race"><option></option></select>
+        <label>Niveau minimum</label><input type="text" id="minlv" name="minlv"/>
+        <label>Niveau maximum</label><input type="text" id="maxlv" name="maxlv"/>
+	-->
+	{{ form.race() }}
+    </form>
+    {% endblock %}
+{% endblock %}

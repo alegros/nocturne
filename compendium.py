@@ -1,9 +1,3 @@
-'''This class needs to be initialize with the result of the following
-query on the nocturne.db sqlite3 database as shown in testcompendium.py
-
-It contains all the data and operations required by web.py so that
-all the fusion logic is encapsulated here.
-'''
 from string import join
 from collections import OrderedDict
 import sqlite3
@@ -21,13 +15,13 @@ class Compendium(object):
         self.specials = {}
         self.affinities = {}
         # Affinities
-        for aff in t_affinities:
+        for aff in self.t_affinities:
             if aff[0] not in self.affinities:
                 self.affinities[aff[0]] = []
             self.affinities[aff[0]].append(aff[1])
         # races and demons
-        for row in t_demons:
-            demon = Demon(ronw)
+        for row in self.t_demons:
+            demon = Demon(row)
             self.demons[demon.name] = demon
             for aff in self.affinities[demon.name]:
                 demon.add_affinity(aff)
@@ -37,16 +31,16 @@ class Compendium(object):
         # Affinities is not needed anymore
         self.affinities = None
         # fusion rules
-        for row in t_fsn_race:
+        for row in self.t_fsn_race:
             if row[0] not in self.rules:
                 self.rules[row[0]] = []
             self.rules[row[0]].append([row[1], row[2]])
         # special fusions
-        self.specials = {row[0]:row[1] for row in t_fsn_special}
+        self.specials = {row[0]:row[1] for row in self.t_fsn_special}
         # Fiend fusions
-        self.fiends = {fiend[0]:fiend for fiend in t_fsn_ds}
+        self.fiends = {fiend[0]:fiend for fiend in self.t_fsn_ds}
         # Evolutions
-        self.evolutions = t_fsn_evo
+        self.evolutions = self.t_fsn_evo
         self.sqldestroy()
             
     def sqlinit(self):
@@ -137,6 +131,9 @@ class Compendium(object):
         return "Fiend fusions for %s" % child.name
 
     '''Functions for retrieving data in the collections'''            
+    def get_races(self):
+        return self.races.keys()
+
     def names(self):
         ''' Returns names as : "Pixie"'''
         return self.demons.keys()
