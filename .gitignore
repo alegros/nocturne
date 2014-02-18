@@ -44,6 +44,5 @@ venv/
 # Vim can be annoying...
 *.swp
 
-# Emacs too...
-\#*\#
-*~
+# Unwanted on the repo
+db_scripts/*
