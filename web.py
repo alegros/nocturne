@@ -5,6 +5,8 @@ from conf import *
 from compendium import Compendium
 from SearchForm import SearchForm
 import memcache
+from wtforms import BooleanField, SelectField
+from string import replace
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -44,13 +46,23 @@ def reverse_result():
 def search():
     form = SearchForm()
     form.race.choices = [(x,x) for x in g.cmp.get_races()]
+    form.fire.choices = [('fire'+x,x) for x in g.cmp.affinities_set]
+    form.ice.choices = [('ice'+x,x) for x in g.cmp.affinities_set]
+    form.elec.choices = [('elec'+x,x) for x in g.cmp.affinities_set]
+    form.force.choices = [('force'+x,x) for x in g.cmp.affinities_set]
+    form.death.choices = [('death'+x,x) for x in g.cmp.affinities_set]
+    form.expel.choices = [('expel'+x,x) for x in g.cmp.affinities_set]
+    form.ailments.choices = [('ailments'+x,x) for x in g.cmp.affinities_set]
+    form.mind.choices = [('mind'+x,x) for x in g.cmp.affinities_set]
+    form.phys.choices = [('phys'+x,x) for x in g.cmp.affinities_set]
+    form.nerve.choices = [('nerve'+x,x) for x in g.cmp.affinities_set]
+    form.curse.choices = [('curse'+x,x) for x in g.cmp.affinities_set]
+    form.magic.choices = [('magic'+x,x) for x in g.cmp.affinities_set]
     if request.method == 'GET':
-        print 'search get'
         return render_template('search.html', form=form)
     elif request.method == 'POST':
         searchform = SearchForm(request.form)
         results= None
-        print 'SearchForm.race = ', searchform.race
         return render_template('searchResult.html', results=results)
 
 @app.context_processor
@@ -62,11 +74,12 @@ def utility_processor():
 
 @app.before_request
 def before_request():
-    # retrieves the Compendium object
+    # Connect to the cache
     mc = memcache.Client(['127.0.0.1:11211'], debug=0)
+    # retrieves the Compendium object
     # either creates it or get it from the cache
     if mc.get('cmp') == None:
-        mc.set('cmp', Compendium())
+        mc.set('cmp', Compendium(), 5)
     g.cmp = mc.get('cmp')
 
 if __name__ == '__main__':

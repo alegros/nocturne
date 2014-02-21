@@ -14,8 +14,13 @@ class Compendium(object):
         self.evolutions = []
         self.specials = {}
         self.affinities = {}
+        self.elements = set()
+        self.affinities_set = set(['none'])
         # Affinities
         for aff in self.t_affinities:
+            affinity, element = aff[1].split(':')
+            self.elements.add(element)
+            self.affinities_set.add(affinity)
             if aff[0] not in self.affinities:
                 self.affinities[aff[0]] = []
             self.affinities[aff[0]].append(aff[1])
@@ -27,7 +32,7 @@ class Compendium(object):
                 demon.add_affinity(aff)
             if demon.race not in self.races:
                 self.races[demon.race] = []
-            self.races[demon.race].append(demon)
+            self.races[demon.race].append(demon.name)
         # Affinities is not needed anymore
         self.affinities = None
         # fusion rules
@@ -79,10 +84,10 @@ class Compendium(object):
             return None
         else:
             for demon in self.races[raceresult]:
-                if demon.lv > average:
+                if self.get(demon).lv > average:
                     fused = demon
                     break
-            return fused
+            return self.get(fused)
         
     def find_parents(self, child, parent):
         return_data = None
@@ -97,9 +102,9 @@ class Compendium(object):
             parents = []
             previousRankLv=0
             for demon in self.races[child.race]:
-                if demon.lv == child.lv:
+                if self.get(demon).lv == child.lv:
                     break
-                previousRankLv = demon.lv
+                previousRankLv = self.get(demon).lv
             rules = self.rules[child.race]
             for rule in rules:
                 race1 = self.races[rule[0]]
@@ -107,12 +112,12 @@ class Compendium(object):
                 for x in race1:
                     for y in race2:
                         if ((parent != None and parent != '')
-                            and x.name != parent
-                            and y.name != parent):
+                            and x != parent
+                            and y != parent):
                             continue
-                        average = (x.lv + y.lv) / 2
+                        average = (self.get(x).lv + self.get(y).lv) / 2
                         if average < child.lv and average >= previousRankLv:
-                            couple = (x.long_name(), y.long_name())
+                            couple = (self.get(x), self.get(y))
                             parents.append(couple)
                             break
             return_data = parents
@@ -207,3 +212,9 @@ luck : %s
 
 %s
 ''' % (self.race, self.name, self.lv, self.cost, affinities, self.hp, self.mp, self.stg, self.mag, self.vit, self.agi, self.lck, self.spells, self.info)
+
+
+class Affinity(object):
+    def __init__(self, affinity, element):
+        self.affinity = affinity
+        self.element = element
