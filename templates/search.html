@@ -3,24 +3,12 @@
     {{ super() }}
     {% block content %}
     <form action="/search" method="POST">
-        <!--<p>Démon<input type="submit" id="chercher" name="chercher" value="Chercher"/></p>
-        <label>Race</label><select id="race" name="race"><option></option></select>
-        <label>Niveau minimum</label><input type="text" id="minlv" name="minlv"/>
-        <label>Niveau maximum</label><input type="text" id="maxlv" name="maxlv"/>
-	-->
-        <div> {{ form.race.label }} {{ form.race() }} </div>
-        <div> {{ form.fire.label }} {{ form.fire() }} </div>
-        <div> {{ form.ice.label }} {{ form.ice() }} </div>
-        <div> {{ form.elec.label }} {{ form.elec() }} </div>
-        <div> {{ form.force.label }} {{ form.force() }} </div>
-        <div> {{ form.death.label }} {{ form.death() }} </div>
-        <div> {{ form.expel.label }} {{ form.expel() }} </div>
-        <div> {{ form.ailments.label }} {{ form.ailments() }} </div>
-        <div> {{ form.mind.label }} {{ form.mind() }} </div>
-        <div> {{ form.phys.label }} {{ form.phys() }} </div>
-        <div> {{ form.nerve.label }} {{ form.nerve() }} </div>
-        <div> {{ form.curse.label }} {{ form.curse() }} </div>
-        <div> {{ form.magic.label }} {{ form.magic() }} </div>
+        <span> {{ form.race.label }} {{ form.race() }} </span>
+        <span> {{ form.level.label }} {{ form.level() }} </span>
+        {% for attribute in metadata.affinities %}
+        <div>{{ getattr(form, attribute).label }} {{ getattr(form, attribute) }}</div>
+        {% endfor %}
+        <input type="submit", onclick="search()", value="Search" />
     </form>
     {% endblock %}
 {% endblock %}

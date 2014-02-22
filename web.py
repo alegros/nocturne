@@ -3,10 +3,9 @@
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 from conf import *
 from compendium import Compendium
-from SearchForm import SearchForm
+from SearchForm import SearchForm, AFF_ATTR
 import memcache
-from wtforms import BooleanField, SelectField
-from string import replace
+from wtforms import SelectField
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -44,32 +43,47 @@ def reverse_result():
 
 @app.route('/search', methods=['POST', 'GET'])
 def search():
-    form = SearchForm()
-    form.race.choices = [(x,x) for x in g.cmp.get_races()]
-    form.fire.choices = [('fire'+x,x) for x in g.cmp.affinities_set]
-    form.ice.choices = [('ice'+x,x) for x in g.cmp.affinities_set]
-    form.elec.choices = [('elec'+x,x) for x in g.cmp.affinities_set]
-    form.force.choices = [('force'+x,x) for x in g.cmp.affinities_set]
-    form.death.choices = [('death'+x,x) for x in g.cmp.affinities_set]
-    form.expel.choices = [('expel'+x,x) for x in g.cmp.affinities_set]
-    form.ailments.choices = [('ailments'+x,x) for x in g.cmp.affinities_set]
-    form.mind.choices = [('mind'+x,x) for x in g.cmp.affinities_set]
-    form.phys.choices = [('phys'+x,x) for x in g.cmp.affinities_set]
-    form.nerve.choices = [('nerve'+x,x) for x in g.cmp.affinities_set]
-    form.curse.choices = [('curse'+x,x) for x in g.cmp.affinities_set]
-    form.magic.choices = [('magic'+x,x) for x in g.cmp.affinities_set]
+    # Only way to dynamicaly add attributes to a wtforms.Form
+    class DynamicSearchForm(SearchForm):
+        pass
+
+    # Create form widgets attributes for DynamicSearchForm
+    setattr(DynamicSearchForm, u'race', SelectField(u'Race'))
+    for el in g.cmp.elements:
+        setattr(DynamicSearchForm, AFF_ATTR+el, SelectField(el))
+
+    # Now let's make an instance to use
+    form = DynamicSearchForm(request.form)
+    # Assign values to multiple choice widgets
+    getattr(form, u'race').choices = [(x,x) for x in g.cmp.get_races()]
+    for attribute in dir(form):
+        if attribute.startswith(AFF_ATTR):
+            getattr(form, attribute).choices = [(x,x) for x in g.cmp.affinities_set]
+
     if request.method == 'GET':
-        return render_template('search.html', form=form)
+        metadata = searchform_metadata(form)
+        return render_template('search.html', form=form, metadata=metadata)
     elif request.method == 'POST':
-        searchform = SearchForm(request.form)
-        results= None
+        # Process search and query the compendium here...
+        results = ['Dummy data. Search processing not implemented.']
         return render_template('searchResult.html', results=results)
+
+def searchform_metadata(form):
+    '''Retrieve and organize dynamicaly created attributes in form.'''
+    class SearchformMetadata(object):
+        affinities = []
+        def __init__(self, form):
+            for attr in dir(form):
+                if attr.startswith(AFF_ATTR):
+                    self.affinities.append(attr)
+    return SearchformMetadata(form)
 
 @app.context_processor
 def utility_processor():
     # Ajoute les fonctions de formattage au contexte des templates
     tools = {}
     tools['len'] = len
+    tools['getattr'] = getattr
     return tools
 
 @app.before_request

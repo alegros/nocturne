@@ -23,3 +23,10 @@ function reverse()
         $("#response").html(response.responseText);
     });
 }
+
+function search()
+{
+    var response = $.post("/search", {}, function() {
+        $("#response").html(response.responseText);
+    });
+}

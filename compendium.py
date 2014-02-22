@@ -15,7 +15,7 @@ class Compendium(object):
         self.specials = {}
         self.affinities = {}
         self.elements = set()
-        self.affinities_set = set(['none'])
+        self.affinities_set = set([u'none'])
         # Affinities
         for aff in self.t_affinities:
             affinity, element = aff[1].split(':')
@@ -156,6 +156,10 @@ class Compendium(object):
     def get(self, name):
         return self.demons[name]
 
+    def affinities_matrice(self):
+        return {el:self.affinities_set for el in self.elements}
+
+
 class Demon(object):
     '''A class used exclusively by the Compendium class'''
     def __init__(self, row):
@@ -212,9 +216,3 @@ luck : %s
 
 %s
 ''' % (self.race, self.name, self.lv, self.cost, affinities, self.hp, self.mp, self.stg, self.mag, self.vit, self.agi, self.lck, self.spells, self.info)
-
-
-class Affinity(object):
-    def __init__(self, affinity, element):
-        self.affinity = affinity
-        self.element = element
