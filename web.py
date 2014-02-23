@@ -36,7 +36,7 @@ def fusion_result():
 @app.route('/reverseFusion', methods=['POST', 'GET'])
 def reverse_result():
     if request.method == 'GET':
-        return render_template('reverseForm.html', demons=g.cmp.long_names(), races=g.cmp.get_races())
+        return render_template('reverseForm.html', demons=g.cmp.long_names(), races=g.cmp.races_list)
     elif request.method == 'POST':
         if 'parentdemon' in request.form:
             recipes, fs_type = g.cmp.find_parents(request.form['child'], request.form['parentdemon'])
@@ -53,7 +53,7 @@ def search():
 
     # Create form widgets attributes for DynamicSearchForm
     setattr(DynamicSearchForm, u'race', SelectField(u'Race'))
-    for el in g.cmp.elements:
+    for el in g.cmp.elements_set:
         setattr(DynamicSearchForm, AFF_ATTR+el, SelectField(el))
 
     # Now let's make an instance to use

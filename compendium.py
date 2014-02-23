@@ -4,22 +4,24 @@ import sqlite3
 
 class Compendium(object):
     def __init__(self):
+        self.db_path = 'nocturne.db'
         self.sqlinit()
         self.races = {}
         # We want the demons to stay in the order in which
-        # they were selected : by race and level.
+        # they were selected : by race and level, so we use OrderedDict.
         self.demons = OrderedDict()
-        self.rules = {}
+        self.rules = {} #
         self.fiends = {}
         self.evolutions = []
         self.specials = {}
-        self.affinities = {}
-        self.elements = set()
-        self.affinities_set = set([u'none'])
+        self.affinities = {} #{ demon name : []}
+        self.elements_set = set() #Attack types (Fire, physical, expel, etc...)
+        self.affinities_set = set([u'none']) #Contains all types of affinities (weak, drain, etc...)
+
         # Affinities
         for aff in self.t_affinities:
             affinity, element = aff[1].split(':')
-            self.elements.add(element)
+            self.elements_set.add(element)
             self.affinities_set.add(affinity)
             if aff[0] not in self.affinities:
                 self.affinities[aff[0]] = []
@@ -46,10 +48,17 @@ class Compendium(object):
         self.fiends = {fiend[0]:fiend for fiend in self.t_fsn_ds}
         # Evolutions
         self.evolutions = self.t_fsn_evo
+
+        # We get rid of all the self.t_... variables to lighten the instance
         self.sqldestroy()
+
+        # Additional lists for convenience
+        # These are flat lists of strings
+        self.demons_list = self.demons.keys()
+        self.races_list = self.races.keys()
             
     def sqlinit(self):
-        cnx = sqlite3.connect('nocturne.db')
+        cnx = sqlite3.connect(self.db_path)
         self.t_demons = cnx.execute('select name, race, lv, stats, affinities, spell, cost, info, fs_type from demons order by race, lv').fetchall()
         self.t_fsn_race = cnx.execute('select result, demon1, demon2 from fsn_race').fetchall()
         self.t_fsn_ds = cnx.execute('select demon, kagutsuhi, race from fsn_ds').fetchall()
@@ -144,13 +153,6 @@ class Compendium(object):
         return u"Fiend fusion for %s" % child.name
 
     '''Functions for retrieving data in the collections'''            
-    def get_races(self):
-        return self.races.keys()
-
-    def names(self):
-        ''' Returns names as : "Pixie"'''
-        return self.demons.keys()
-
     def long_names(self):
         '''Returns tuples such as : ("Pixie", "Fairy Pixie")'''
         return [(d.name, '%s %s' % (d.race, d.name))
@@ -164,8 +166,13 @@ class Compendium(object):
     def get(self, name):
         return self.demons[name]
 
-    def affinities_matrice(self):
-        return {el:self.affinities_set for el in self.elements}
+    #def affinities_matrice(self):
+    #    return {el:self.affinities_set for el in self.elements}
+
+
+'''Here is a set of functions that accept data from Compendium
+as input parameters and format these data into more readable
+strings or collections of strings.'''
 
 
 class Demon(object):
