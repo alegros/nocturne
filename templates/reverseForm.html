@@ -1,17 +1,39 @@
 {% extends "layout.html" %}
 {% block content %}
     {{ super() }}
-    <select id="child" name="demon">
-        {% for demon in demons %}
-        <option value="{{demon[0]}}">{{demon[1]}}</option>
-        {% endfor %}
-    </select>
-    <input type="submit" onclick="reverse()" value="Parents"/>
-    </br>
-    <select id="parent1" name="parent1">
-        <option></option>
-        {% for demon in demons %}
-        <option value="{{demon[0]}}">{{demon[1]}}</option>
-        {% endfor %}
-    </select>Parent 1
+    <div class="reverse_demon">
+        <h4>Reverse demon</h4>
+        <select id="childdemon" name="childdemon">
+            {% for demon in demons %}
+                <option value="{{demon[0]}}">{{demon[1]}}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" onclick="reverse_demon()" value="Parents"/>
+        <br/>
+        <select id="parentdemon" name="parentdemon">
+            <option></option> <!-- Do not change the first option ! -->
+            {% for demon in demons %}
+                <option value="{{demon[0]}}">{{demon[1]}}</option>
+            {% endfor %}
+        </select>Parent 1
+    </div>
+    <div class="reverse_race">
+        <h4>Reverse race</h4>
+        <select id="childrace" name="childrace">
+            {% for race in races %}
+                <option value="{{race}}">{{race}}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" onclick="reverse_race()" value="Parents"/>
+        <br/>
+        <select id="parentrace" name="parentrace">
+            <option></option> <!-- Do not change the first option ! -->
+            {% for race in races %}
+                <option value="{{race}}">{{race}}</option>
+            {% endfor %}
+        </select>Parent 1
+        <!-- drop down for child race -->
+        <!-- submit button -->
+        <!-- drop down for first parent race -->
+    </div>
 {% endblock %}

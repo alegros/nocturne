@@ -36,9 +36,13 @@ def fusion_result():
 @app.route('/reverseFusion', methods=['POST', 'GET'])
 def reverse_result():
     if request.method == 'GET':
-        return render_template('reverseForm.html', demons=g.cmp.long_names())
+        return render_template('reverseForm.html', demons=g.cmp.long_names(), races=g.cmp.get_races())
     elif request.method == 'POST':
-        recipes, fs_type = g.cmp.find_parents(request.form['child'], request.form['parent1'])
+        if 'parentdemon' in request.form:
+            recipes, fs_type = g.cmp.find_parents(request.form['child'], request.form['parentdemon'])
+        else: #race
+            recipes = g.cmp.find_parents_races(request.form['childrace'], request.form['parentrace'])
+            return render_template('reverseRace.html', recipes=recipes)
         return render_template('reverseResult.html', recipes=recipes, fs_type=fs_type)
 
 @app.route('/search', methods=['POST', 'GET'])
@@ -65,7 +69,7 @@ def search():
         return render_template('search.html', form=form, metadata=metadata)
     elif request.method == 'POST':
         # Process search and query the compendium here...
-        results = ['Dummy data. Search processing not implemented.']
+        results = ['Search processing not implemented.']
         return render_template('searchResult.html', results=results)
 
 def searchform_metadata(form):

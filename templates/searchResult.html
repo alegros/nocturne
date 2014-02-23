@@ -1,9 +1,3 @@
-{% extends "layout.html" %}
-{% block body %}
-    {{ super() }}
-    {% block content %}
-    {% for result in results %}
-        {{ result }}
-    {% endfor %}
-    {% endblock %}
-{% endblock %}
+{% for result in results %}
+<div> {{result}} </div>
+{% endfor %}

@@ -90,16 +90,19 @@ class Compendium(object):
             return self.get(fused)
         
     def find_parents(self, child, parent):
-        return_data = None
+        return_data = [] 
         child = self.get(child)
-        if child.fs_type == 1:
-            return_data = self.myth_fusion(child.name)
+        # Exclude elements in mitamas for now
+        if child.race in [u'Element', u'Mitama']:
+            return_data.append(u"No data on %s demons yet." % (child.race))
+        # Now check fusion type
+        elif child.fs_type == 1:
+            return_data.append(self.myth_fusion(child.name))
         elif child.fs_type == 2:
-            return_data = self.evolution(child.name)
+            return_data.append(self.evolution(child.name))
         elif child.fs_type == 3:
-            return_data = self.fiend_fusion(child.name)
-        else:
-            parents = []
+            return_data.append(self.fiend_fusion(child.name))
+        elif child.fs_type == 0:
             previousRankLv=0
             for demon in self.races[child.race]:
                 if self.get(demon).lv == child.lv:
@@ -118,22 +121,27 @@ class Compendium(object):
                         average = (self.get(x).lv + self.get(y).lv) / 2
                         if average < child.lv and average >= previousRankLv:
                             couple = (self.get(x), self.get(y))
-                            parents.append(couple)
+                            return_data.append(couple)
                             break
-            return_data = parents
         return return_data, child.fs_type
+
+    def find_parents_races(self, race, parent):
+        if parent != None and parent != '':
+            return [race_couple for race_couple in self.rules[race] if parent in race_couple]
+        else:
+            return self.rules[race]
 
     def myth_fusion(self, child):
         child = self.get(child)
-        return "Myth fusions for %s" % child.name
+        return u"Myth fusion for %s" % child.name
     
     def evolution(self, child):
         child = self.get(child)
-        return "Evolutions for %s" % child.name
+        return u"Evolution for %s" % child.name
 
     def fiend_fusion(self, child):
         child = self.get(child)
-        return "Fiend fusions for %s" % child.name
+        return u"Fiend fusion for %s" % child.name
 
     '''Functions for retrieving data in the collections'''            
     def get_races(self):

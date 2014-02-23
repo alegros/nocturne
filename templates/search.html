@@ -2,13 +2,11 @@
 {% block body %}
     {{ super() }}
     {% block content %}
-    <form action="/search" method="POST">
-        <span> {{ form.race.label }} {{ form.race() }} </span>
-        <span> {{ form.level.label }} {{ form.level() }} </span>
-        {% for attribute in metadata.affinities %}
-        <div>{{ getattr(form, attribute).label }} {{ getattr(form, attribute) }}</div>
-        {% endfor %}
-        <input type="submit", onclick="search()", value="Search" />
-    </form>
+    <span> {{form.race.label}} {{form.race()}} </span>
+    <span> {{form.level.label}} {{form.level()}} </span>
+    {% for attribute in metadata.affinities %}
+    <div>{{getattr(form, attribute).label}} {{getattr(form, attribute)}}</div>
+    {% endfor %}
+    <input type="submit", onclick="search()", value="Search" />
     {% endblock %}
 {% endblock %}

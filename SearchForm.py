@@ -1,4 +1,4 @@
-from wtforms import Form, SelectField, IntegerField
+from wtforms import Form, IntegerField
 
 # Prefixes for dynamicaly created attributes
 # to recognize them and properly lay out the form in the template
