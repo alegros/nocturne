@@ -59,7 +59,7 @@ def search():
     # Now let's make an instance to use
     form = DynamicSearchForm(request.form)
     # Assign values to multiple choice widgets
-    getattr(form, u'race').choices = [(x,x) for x in g.cmp.get_races()]
+    getattr(form, u'race').choices = [(x,x) for x in g.cmp.races_list]
     for attribute in dir(form):
         if attribute.startswith(AFF_ATTR):
             getattr(form, attribute).choices = [(x,x) for x in g.cmp.affinities_set]

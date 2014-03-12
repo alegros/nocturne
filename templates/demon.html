@@ -1,24 +1,24 @@
-<div id='demon'>
-    <p><b>{{demon.name}}</b>({{demon.race}}) level {{demon.lv}} ({{demon.cost}} maccas)</p>
-    <div id='stats'>
-        <span id='hp'>HP {{demon.hp}}</span>
-        <span id='mp'>MP {{demon.mp}}</span>
-        <span id='str'>Strength {{demon.stg}}</span>
-        <span id='vit'>Vitality {{demon.vit}}</span>
-        <span id='mag'>Magic {{demon.mag}}</span>
-        <span id='agi'>Agility {{demon.agi}}</span>
-        <span id='lck'>Luck {{demon.lck}}</span>
-    </div>
-    <div id='affs'>
-        {% for aff in demon.affinities %}
-        <span id='aff'>{{aff}}</span>
-        {% endfor %}
-    </div>
-    <div id='spells'>
-        <!--{% for spell in demon.spells %}
-        <span id='spell'>{{spell}}</span>
-        {% endfor %}-->
-	<span='spells-span'> Spells {{demon.spells}}</span>
-    </div>
-    <p>{{demon.info}}</p>
+<div id='demon' class='demon-div'>
+	<div class='demon-data'><b>{{demon.name}}</b> ({{demon.race}}) level {{demon.lv}} ({{demon.cost}} maccas)</div>
+	<div class='demon-stats'>
+		<p class='demon-data' id='hp'>HP {{demon.hp}}</p>
+		<p class='demon-data' id='mp'>MP {{demon.mp}}</p>
+		<p class='demon-data' id='str'>Strength {{demon.stg}}</p>
+		<p class='demon-data' id='vit'>Vitality {{demon.vit}}</p>
+		<p class='demon-data' id='mag'>Magic {{demon.mag}}</p>
+		<p class='demon-data' id='agi'>Agility {{demon.agi}}</p>
+		<p class='demon-data' id='lck'>Luck {{demon.lck}}</p>
+	</div>
+	<div class='demon-affs'>
+		{% for aff in demon.affinities %}
+		<p class='demon-data'>{{aff}}</p>
+		{% endfor %}
+	</div>
+	<div class='demon-spells'>
+		<!--{% for spell in demon.spells %}
+		<p id='spell'>{{spell}}</p>
+		{% endfor %}-->
+		<p class='demon-data'> Spells {{demon.spells}}</p>
+	</div>
+	<div class='demon-data'>{{demon.info}}</div>
 </div>

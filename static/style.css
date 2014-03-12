@@ -12,45 +12,62 @@
 /*-----------------------------------*/
 
 body { 
-    font-family: sans-serif;
-    background: #0E2B39;
-    color: #ccc;
+    /*font-family: sans-serif;*/
+	background: #0A1C29;
+	color: #cccccc;
+	text-decoration: bold;
+	margin-left: 10px;
 }
 h2 {
-    font-size: 1.2em;
+    font-size: 1em;
 }
 #banner {
-    height: 100px;
+    height: 80px;
 }
 #navigation {
     float: left;
     list-style: none;
     padding: 0;
     margin: 0;
-    width: 10em;
+    width: 15%;
 }
 #navigation > li {
-    background: #2A4958 ;
-    margin-bottom: 1px;
+	background: linear-gradient(to right, #1E3240 0%,#0A1C29 100%);
+	margin-bottom: 5px;
 }
 #navigation li a {
-    display: block;
-    text-decoration: none;
-    text-align: center;
-    color: #ccc;
-    padding: 0.75em;
+	display: block;
+	text-decoration: none;
+	text-align: center;
+	color: #8582B0;
+	padding: 0.75em;
+	border-width: 1px;
+	border-color: #1E3240;
+	border-style: solid;
 }
 #navigation li a:hover, #navigation li a:focus, #navigation li a:active {
-    text-decoration: underline;
-    background: #7A9BAC;
+	background: #38556A;
 }
 #container {
-    /*width: 50em;*/
-    margin-left: 12em;
+        width: 60%;
+	margin-left: 20%;
+	margin-right: 20%;
 }
-#form {
-    margin-bottom: 2em;
+
+.demon > div {
+	margin-bottom:20px;
 }
-#content * {
-margin: 0.5em;
+.demon-data {
+	background: #1E3240;
+	padding: 5px;
+	border-radius: 5px;
+	margin: 5px;
+	margin-left:auto;
+}
+.demon-stats > .demon-data, .demon-affs > .demon-data, .demon-spells > .demon-data {
+        display: inline;
+}
+.demon-stats, .demon-affs, .demon-spells {
+        margin-top: 20px;
+        margin-bottom: 20px;
 }

@@ -55,7 +55,9 @@ class Compendium(object):
         # Additional lists for convenience
         # These are flat lists of strings
         self.demons_list = self.demons.keys()
+        self.demons_list.sort()
         self.races_list = self.races.keys()
+        self.races_list.sort()
             
     def sqlinit(self):
         cnx = sqlite3.connect(self.db_path)
@@ -86,8 +88,8 @@ class Compendium(object):
         # Look for the resulting race
         for race in self.rules:
             for fusion in self.rules[race]:
-                if (fusion[0]==demonx.race and fusion[1]==demony.race)\
-                or (fusion[0]==demony.race and fusion[1]==demonx.race):
+                if ((fusion[0]==demonx.race and fusion[1]==demony.race)
+                or (fusion[0]==demony.race and fusion[1]==demonx.race)):
                     raceresult = race
         if raceresult == None:
             return None
@@ -164,6 +166,7 @@ class Compendium(object):
                 for d in self.demons.values()]
 
     def get(self, name):
+        '''Return a demon given its name'''
         return self.demons[name]
 
     #def affinities_matrice(self):
