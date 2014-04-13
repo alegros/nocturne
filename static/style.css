@@ -14,22 +14,22 @@
 body { 
     /*font-family: sans-serif;*/
 	background: #0A1C29;
-	color: #cccccc;
+	width:800px;
+	color: #8582b0;
+	text-align:justify;
 	text-decoration: bold;
-	margin-left: 10px;
+	margin:auto;
+	margin-top:100px;;
 }
 h2 {
     font-size: 1em;
-}
-#banner {
-    height: 80px;
 }
 #navigation {
     float: left;
     list-style: none;
     padding: 0;
     margin: 0;
-    width: 15%;
+    width: 18%;
 }
 #navigation > li {
 	background: linear-gradient(to right, #1E3240 0%,#0A1C29 100%);
