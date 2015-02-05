@@ -1,9 +1,3 @@
-Mettre le chemin de la bdd en membre de classe
+Abandonner la génération dynamique de wtforms par search ea SearchFormMetadata, remplacer par du code static
 
-compendium.races devrait contenir le nom des démons, pas les object Demon. Modifier __init__
-Modifier en conséquence : 
-__init__ section #races and dmeons
-la fin de fuse() : Ne plus parcourir les objets Demon dans la race résultante mais les noms des démons. Tester le niveau du démon avec compendium.get('nom') et réutiliser get() pour retourner un objet Demon
-find_parents
-
-Dans find_parents(), transformer 'else' en 'elif fs_type==0'
+Faire un répertoire alternatif pour les templates pour tester string.format
