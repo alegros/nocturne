@@ -7,3 +7,19 @@ Une fois la recherche fonctionnelle :
   - Une fonction render qui prend en paramètre les données du template et effectue
     les traitements/appels de fonction nécessaires à sa construction en fonction des données passées (boucles/conditionnelles)
     et renvoie le template formaté
+
+- Génération d'une unique page statique avec liens internes -
+Structure
+  1 - Section liens
+    1.1 - Races, liste de liens vers le premier démon de chaque race
+    1.2 - Démon, liste de lien vers chaque démon
+    1.3 - Skills, liste de tous les skills classés par type avec pour chacun une liste de liens vers les démons
+          le possédant rangés par ordre de niveau d'acquisition
+  2 - Section base de donnée 
+    2.1 - Fiches démons groupées par race et par ordre croissant des niveaux
+      2.1.1 - Informations démons
+      2.1.2 - Liste (Parents) des couples parents pour la fusion
+      2.1.3 - Liste déroulante (Fusions) contenant tous les démons avec lequel celui-ci peut être fusionné, chaque démon (<option>) 
+              de la liste renvoie vers la fiche du démon résultant de cette fusion
+      2.1.4 - Liste déroulante (Enfants) contenant tous les démons enfants, chaque démon de la liste renvoie vers
+              la fiche du démon devant être fusionné avec celui-ci pour obtenir le résultat choisi
