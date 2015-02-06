@@ -1,3 +1,9 @@
-Abandonner la génération dynamique de wtforms par search ea SearchFormMetadata, remplacer par du code static
+Abandonner la génération dynamique de wtforms par search et SearchFormMetadata, remplacer par du code static
 
-Faire un répertoire alternatif pour les templates pour tester string.format
+Une fois la recherche fonctionnelle :
+- Ajouter des templates alternatif utilisant string.format
+- Un module python par page html :
+  - Des constantes string contenant le template en plusieurs morceaux (pour les boucles/conditionnelles)
+  - Une fonction render qui prend en paramètre les données du template et effectue
+    les traitements/appels de fonction nécessaires à sa construction en fonction des données passées (boucles/conditionnelles)
+    et renvoie le template formaté
