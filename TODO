@@ -8,13 +8,12 @@ Une fois la recherche fonctionnelle :
     les traitements/appels de fonction nécessaires à sa construction en fonction des données passées (boucles/conditionnelles)
     et renvoie le template formaté
 
-- Génération d'une unique page statique avec liens internes -
+- Génération d'une unique page statique sans javascript avec liens internes -
 Structure
   1 - Section liens
-    1.1 - Races, liste de liens vers le premier démon de chaque race
-    1.2 - Démon, liste de lien vers chaque démon
-    1.3 - Skills, liste de tous les skills classés par type avec pour chacun une liste de liens vers les démons
-          le possédant rangés par ordre de niveau d'acquisition
+    1.1 - Races, liste de liens vers le premier démon de chaque race (section 2.1)
+    1.2 - Démon, liste de lien vers chaque démon (section 2.1.1)
+    1.3 - Skills, liste de lien vers chaque skill (section 2.2)
   2 - Section base de donnée 
     2.1 - Fiches démons groupées par race et par ordre croissant des niveaux
       2.1.1 - Informations démons
@@ -23,3 +22,41 @@ Structure
               de la liste renvoie vers la fiche du démon résultant de cette fusion
       2.1.4 - Liste déroulante (Enfants) contenant tous les démons enfants, chaque démon de la liste renvoie vers
               la fiche du démon devant être fusionné avec celui-ci pour obtenir le résultat choisi
+      2.1.5 - Listes (Skills) contenant tous les sorts des démons parents avec niveau d'acquisition
+    2.2 - Fiches skills par type et niveau
+      2.2.1 - Liste des démons qui ont ce skill rangés par niveau d'acquisition
+
+Module de tests
+  Le code html généré par chaque test se présente ainsi :
+    1 - En-tête du contexte (<html><head><body><autre-balise-intermédiaire>etc...)
+    2 - Bloc html généré à tester (Ex : <div class=fiche-demon">...</div>)
+    3 - Section spéciale affichant le code source complet de la page, non interprété
+    4 - Pied du contexte (</balises intermédiaires></body></html>etc...)
+  
+  Les sections 1 et 4 sont obtenus en tuple par une fonction propre à chaque contexte (contexte fiche démon,
+  contexte liste de couples parents etc...)
+  
+  test_html_base
+
+  test_html_infos_demons
+    Génère le bloc pour la fiche démon, informations de base.
+    Un fichier html par démon (infos_pixie.html)
+  test_html_parents_démons
+    Génère le bloc pour la liste des parents du démon
+    Un fichier html par démon (parents_pixie.html)
+  test_html_fusions_demons
+    Génère le bloc pour la liste section 2.1.3
+    Un fichier html par démon (fusions_pixie.html)
+  Générer une liste des fonctions de test à créer
+    Une pour la génération de la section 1.1
+    Une pour la génération de la section 1.2
+    Une pour la génération de la section 1.3
+    Nombre de démons * 1 pour la génération de la section 2.1.1 (test_html_infos_demons)
+    Nombre de démons * 1 pour la génération de la section 2.1.2 (test_html_parents_lilim)
+    Nombre de démons * 1 pour la génération de la section 2.1.3 (test_html_fusion_lilim)
+    Nombre de démons * 1 pour la génération de la section 2.1.4
+    Nombre de démons * 1 pour la génération de la section 2.1.5
+    
+  1 - Tests unitaires des  fragments html. Exemple: Tester la génération d'une page contenant
+      la base + le fragment html de la fiche Maragi (test_generer_maragi) ou du démon lilith. Ces fragments de la page complète
+      sont enregistrés dans le répertoire tmp pour ouverture avec un navigateur
