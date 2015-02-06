@@ -7,11 +7,22 @@ Une fois la recherche fonctionnelle :
   - Une fonction render qui prend en paramètre les données du template et effectue
     les traitements/appels de fonction nécessaires à sa construction en fonction des données passées (boucles/conditionnelles)
     et renvoie le template formaté
+    
+- Faire évoluer le compendium
+  Ajouter skills : dictionnaire('nom_skill' : [liste_demons])
+  class Demon:
+    liste de tuples des parents (index de compendium.demons) : [(x, y), (a, b), (c, d)]...
+    
 
 - Génération d'une unique page statique sans javascript avec liens internes -
+Fichiers
+  compendium.py
+  tests_compendium2html.py
+  compendium2html.py
+  
 Structure
   1 - Section liens
-    1.1 - Races, liste de liens vers le premier démon de chaque race (section 2.1)
+    1.1 -Races, liste de liens vers le premier démon de chaque race (section 2.1)
     1.2 - Démon, liste de lien vers chaque démon (section 2.1.1)
     1.3 - Skills, liste de lien vers chaque skill (section 2.2)
   2 - Section base de donnée 
@@ -29,34 +40,17 @@ Structure
 Module de tests
   Le code html généré par chaque test se présente ainsi :
     1 - En-tête du contexte (<html><head><body><autre-balise-intermédiaire>etc...)
-    2 - Bloc html généré à tester (Ex : <div class=fiche-demon">...</div>)
-    3 - Section spéciale affichant le code source complet de la page, non interprété
-    4 - Pied du contexte (</balises intermédiaires></body></html>etc...)
-  
-  Les sections 1 et 4 sont obtenus en tuple par une fonction propre à chaque contexte (contexte fiche démon,
-  contexte liste de couples parents etc...)
-  
-  test_html_base
+    2 - Bloc html généré à tester (<div class=fiche-demon">...</div>)
+    3 - Pied du contexte (</balises intermédiaires></body></html>etc...)
+  - Les sections 1 et 3 sont obtenus en tuple par une fonction propre à chaque contexte (contexte fiche démon,
+  contexte liste de couples parents etc...). Chaque test sait quel contexte il lui faut.
+  - La section 2 est générée par la fonction de test (faisant appel à la fonction qu'elle test).
 
-  test_html_infos_demons
-    Génère le bloc pour la fiche démon, informations de base.
-    Un fichier html par démon (infos_pixie.html)
-  test_html_parents_démons
-    Génère le bloc pour la liste des parents du démon
-    Un fichier html par démon (parents_pixie.html)
-  test_html_fusions_demons
-    Génère le bloc pour la liste section 2.1.3
-    Un fichier html par démon (fusions_pixie.html)
-  Générer une liste des fonctions de test à créer
-    Une pour la génération de la section 1.1
-    Une pour la génération de la section 1.2
-    Une pour la génération de la section 1.3
-    Nombre de démons * 1 pour la génération de la section 2.1.1 (test_html_infos_demons)
-    Nombre de démons * 1 pour la génération de la section 2.1.2 (test_html_parents_lilim)
-    Nombre de démons * 1 pour la génération de la section 2.1.3 (test_html_fusion_lilim)
-    Nombre de démons * 1 pour la génération de la section 2.1.4
-    Nombre de démons * 1 pour la génération de la section 2.1.5
-    
-  1 - Tests unitaires des  fragments html. Exemple: Tester la génération d'une page contenant
-      la base + le fragment html de la fiche Maragi (test_generer_maragi) ou du démon lilith. Ces fragments de la page complète
-      sont enregistrés dans le répertoire tmp pour ouverture avec un navigateur
+  test_html_demon:
+    context_top, context_bottom = html_context_demon()
+    pour chaque demon dans compendium.demons:
+      codehtml = join((compendium2html.demon(object compendium.Demon), context_top, context_bottom), '\n')
+      écrire codehtml dans tests/test_html_demon_'nom du démon'.html
+  fin
+  
+  
